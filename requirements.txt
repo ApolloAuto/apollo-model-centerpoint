@@ -1,0 +1,18 @@
+colorlog
+easydict
+filelock
+numba >= 0.56
+numpy
+nuscenes-devkit
+opencv-python <= 4.6.0
+pandas
+paddledet
+paddleseg
+pyquaternion
+pyyaml
+pillow<=8.3.2
+rarfile
+scikit-image
+scikit-learn
+visualdl
+h5py
