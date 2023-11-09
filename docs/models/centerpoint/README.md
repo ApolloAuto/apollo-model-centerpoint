@@ -377,7 +377,7 @@ Apollo使用百度自动驾驶数据对CenterPoint进行了训练和优化，检
 
 ![centerpoint-cross_road](../../../images/centerpoint-cross%20road.png)
 
-![centerpoint-car](../../../images/centerpoint-car.png)
+![centerpoint-car](../../../images/centerpoint-cars.png)
 
 ![centerpoint-pedestrian](../../../images/centerpoint-pedestrian.png)
 
