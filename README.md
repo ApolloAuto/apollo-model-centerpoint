@@ -1,3 +1,120 @@
+
+# Apollo CenterPoint
+
+该项目提供了开源自动驾驶平台Apollo中Lidar 3D目标检测算法CenterPoint的训练和部署代码。
+## 介绍
+
+CenterPoint是Anchor-Free的三维物体检测器，以点云作为输入，将三维物体在Bird-View下的中心点作为关键点，基于关键点检测的方式回归物体的尺寸、方向和速度。相比于Anchor-Based的三维物体检测器，CenterPoint不需要人为设定Anchor尺寸，面向物体尺寸多样不一的场景时其精度表现更高，且简易的模型设计使其在性能上也表现更加高效。
+
+<div align=center>
+<img src="images/centerpoint.png" width="1200"/>
+</div>
+
+Apollo对CenterPoint进行了一系列优化工作，检测效果和泛化能力都获得大幅提升，可以提供复杂城市道路场景下实时、准确、稳定的3D目标检测效果。
+
+模型端：
+* **更好的检测效果，更强的泛化能力**。使用百万真实路测数据对CenterPoint进行训练和优化，精度和召回率相较于应用最多的CNNSeg模型提升了20%+，检测能力和泛化能力显著提升。
+* **新增城市道路标识检测能力**。提供了锥桶、水马、防撞桶、指示牌等目标的检测能力，极大地保障了自动驾驶的安全性。
+* **降低训练开发成本，提升易用性**。代码中新增功能：冻结网络层finetune训练、fp16训练、自定义数据集训练评测等功能，更加简单易上手。
+
+部署端：
+* **显著提升近处行人目标和小目标的召回率**。对前后处理、配置、模型推理进行了针对性调优和处理，修复了推理端结果不一致问题，行人和小目标召回率提升。
+* **输出polygon，增强跟踪稳定性**。优化了障碍物点云的获取逻辑，使centerpoint可输出准确polygon信息，进一步增强了跟踪的稳定性。
+* **大幅降低模型推理耗时和GPU占用**。提供了tensorrt + fp16推理 & int8推理的功能和教程，在保持模型检测效果前提下，大幅降低了模型的推理耗时和GPU占用，在低算力平台运行可满足实时性要求。
+
+检测结果可视化
+
+<div align=center>
+<img src="images/centerpoint_result2.png" width="1200"/>
+</div>
+
+<div align=center>
+<img src="images/centerpoint_result1.png" width="1200"/>
+</div>
+
+模型文件下载地址
+
+| 模型文件 | 下载地址 |
+| -- | -- |
+| Apollo CenterPoint训练权重文件 | [Link](https://apollo-pkg-beta.bj.bcebos.com/perception_model/centerpoint_core_pretrained_model.zip) |
+| Apollo CenterPoint可部署文件 | [Link](https://apollo-pkg-beta.bj.bcebos.com/perception_model/center_point_paddle.zip) |
+
+## 开发
+
+开发者可基于该代码进行二次开发，快速方便地完成：
+* **学习研究**：使用公开数据集KITTI和NuScenes对CenterPoint进行训练、评测、导出、部署。
+* **增量训练**：使用自定义数据集对CenterPoint进行增量训练，提升在用户自定义场景中的检测效果。
+* **Apollo感知赛事**：使用Apolloscape数据集对CenterPoint进行训练，顺利完成Apollo感知赛事。
+
+
+完整训练流程和配置详见 [centerpoint](./configs/centerpoint/)，下面以KITTI数据集为例进行简单介绍。
+
+先准备KITTI数据集，请在[官网](http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d)进行下载。将数据解压后按照下方的目录结构进行组织：
+
+```
+kitti_dataset_root
+|—— training
+|   |—— label_2
+|   |   |—— 000001.txt
+|   |   |—— ...
+|   |—— calib
+|   |   |—— 000001.txt
+|   |   |—— ...
+|   |—— velodyne
+|   |   |—— 000001.bin
+|   |   |—— ...
+|—— ImageSets
+│   |—— test.txt
+│   |—— train.txt
+│   |—— trainval.txt
+│   |—— val.txt
+```
+
+在Paddle3D的目录下创建软链接 `datasets/KITTI`，指向到上面的数据集目录:
+
+```
+mkdir datasets
+ln -s /path/to/kitti_dataset_root ./datasets
+mv ./datasets/kitti_dataset_root ./datasets/KITTI
+```
+
+生成训练时数据增强所需的真值库:
+
+```
+python tools/create_det_gt_database.py --dataset_name kitti --dataset_root ./datasets/KITTI --save_dir ./datasets/KITTI
+```
+
+```
+kitti_train_gt_database
+|—— anno_info_train.pkl
+|—— Car
+|   |—— 4371_Car_7.bin
+|   |—— ...
+|—— Cyclist
+```
+
+使用8张GPU训练KITTI数据集：
+
+```
+python -m paddle.distributed.launch --gpus 0,1,2,3,4,5,6,7 tools/train.py --config configs/centerpoint/centerpoint_pillars_016voxel_kitti.yml --save_dir ./output_kitti --num_workers 4 --save_interval 5
+```
+模型评测
+
+```
+python tools/evaluate.py --config configs/centerpoint/centerpoint_pillars_016voxel_kitti.yml --model ./output_kitti/epoch_160/model.pdparams --batch_size 1 --num_workers 4
+```
+导出推理模型，将训练时保存的动态图模型文件导出成推理引擎能够加载的静态图模型文件。
+
+```
+python tools/export.py --config configs/centerpoint/centerpoint_pillars_02voxel_nuscenes_10sweep.yml --model /path/to/model.pdparams --save_dir /path/to/output
+```
+
+## 其他资料
+
+* [Apollo自动驾驶平台](https://github.com/ApolloAuto/apollo)
+* [2023星火培训感知专项营：感知模型训练与部署](https://www.bilibili.com/video/BV1RV411c7Xp/)
+* [CenterPoint模型训练与部署](https://apollo.baidu.com/community/article/1141)
+
 # Paddle3D
 ## 🌈简介
 

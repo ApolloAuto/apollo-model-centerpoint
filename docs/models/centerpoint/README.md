@@ -375,11 +375,19 @@ Apollo使用百度自动驾驶数据对CenterPoint进行了训练和优化，检
 
 检测效果：
 
-![centerpoint-cross_road](../../../images/centerpoint-cross%20road.png)
+<div align=center>
+<img src="../../../images/centerpoint_result2.png" width="1200"/>
+</div>
 
-![centerpoint-car](../../../images/centerpoint-cars.png)
+<div align=center>
+<img src="../../../images/centerpoint_result3.png" width="1200"/>
+</div>
 
-![centerpoint-pedestrian](../../../images/centerpoint-pedestrian.png)
+<div align=center>
+<img src="../../../images/centerpoint_result1.png" width="1200"/>
+</div>
+
+
 
 ## <h2 id="10">训练自定义数据集</h2>
 
