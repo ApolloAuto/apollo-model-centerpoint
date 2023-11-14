@@ -12,10 +12,10 @@
       - [1.2.2.5. 安装CPU版的PaddlePaddle(备选)](#1225-安装cpu版的paddlepaddle备选)
       - [1.2.2.6. 验证安装](#1226-验证安装)
       - [1.2.2.7. 更多PaddlePaddle安装方式](#1227-更多paddlepaddle安装方式)
-    - [1.2.3. 安装Paddle3D](#123-安装paddle3d)
-      - [1.2.3.1. 下载Paddle3D源码](#1231-下载paddle3d源码)
-      - [1.2.3.2. 安装Paddle3D依赖](#1232-安装paddle3d依赖)
-      - [1.2.3.3. 安装Paddle3D](#1233-安装paddle3d)
+    - [1.2.3. 安装apollo-model-centerpoint](#123-安装apollo-model-centerpoint)
+      - [1.2.3.1. 下载apollo-model-centerpoint源码](#1231-下载apollo-model-centerpoint源码)
+      - [1.2.3.2. 安装apollo-model-centerpoint依赖](#1232-安装apollo-model-centerpoint依赖)
+      - [1.2.3.3. 安装apollo-model-centerpoint](#1233-安装apollo-model-centerpoint)
   - [1.3. 完整安装脚本](#13-完整安装脚本)
   - [1.4. FAQ](#14-faq)
 
@@ -133,26 +133,26 @@ quit()
 
 `传送门：`(PaddlePaddle其他安装指南)[https://www.paddlepaddle.org.cn/documentation/docs/zh/install/index_cn.html]
 
-### 1.2.3. 安装Paddle3D
+### 1.2.3. 安装apollo-model-centerpoint
 
-#### 1.2.3.1. 下载Paddle3D源码
+#### 1.2.3.1. 下载apollo-model-centerpoint源码
 
 ```bash
-说明：如已下载Paddle3D源码可忽略这一步。
+说明：如已下载apollo-model-centerpoint源码可忽略这一步。
 ```
 
 ```shell
-git clone https://github.com/PaddlePaddle/Paddle3D
+git clone https://github.com/ApolloAuto/apollo-model-centerpoint.git
 ```
 
-#### 1.2.3.2. 安装Paddle3D依赖
+#### 1.2.3.2. 安装apollo-model-centerpoint依赖
 
 ```bash
-cd Paddle3D
+cd apollo-model-centerpoint
 pip install -r requirements.txt
 ```
 
-#### 1.2.3.3. 安装Paddle3D
+#### 1.2.3.3. 安装apollo-model-centerpoint
 
 ```shell
 pip install -e .  # install in edit mode
@@ -160,7 +160,7 @@ pip install -e .  # install in edit mode
 
 ## 1.3. 完整安装脚本
 
-以下是完整的基于conda安装Paddle3D的脚本，假设已经成功安装MiniConda或Anaconda，已安装CUDA 11.6。
+以下是完整的基于conda安装apollo-model-centerpoint的脚本，假设已经成功安装MiniConda或Anaconda，已安装CUDA 11.6。
 
 ```bash
 # 创建虚拟环境
@@ -175,13 +175,13 @@ conda config --set show_channel_urls yes
 # 安装GPU版的PaddlePaddle
 # 对于 CUDA 11.6，需要搭配 cuDNN 8.4.0(多卡环境下 NCCL>=2.7)，安装命令为:
 conda install paddlepaddle-gpu==2.4.1 cudatoolkit=11.6 -c https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/Paddle/ -c conda-forge
-# 下载Paddle3D代码
-# 说明：如已下载Paddle3D源码可忽略这一步。
-git clone https://github.com/PaddlePaddle/Paddle3D
-# 安装Paddle3D依赖
-cd Paddle3D
+# 下载apollo-model-centerpoint代码
+# 说明：如已下载apollo-model-centerpoint源码可忽略这一步。
+git clone https://github.com/ApolloAuto/apollo-model-centerpoint.git
+# 安装apollo-model-centerpoint依赖
+cd apollo-model-centerpoint
 pip install -r requirements.txt
-# 安装Paddle3D
+# 安装apollo-model-centerpoint
 pip install -e .  # install in edit mode
 ```
 

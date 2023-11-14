@@ -46,6 +46,7 @@ Apollo对CenterPoint进行了一系列优化工作，检测效果和泛化能力
 * **增量训练**：使用自定义数据集对CenterPoint进行增量训练，提升在用户自定义场景中的检测效果。
 * **Apollo感知赛事**：使用Apolloscape数据集对CenterPoint进行训练，顺利完成Apollo感知赛事。
 
+环境配置和安装教程详尽[installation](./docs/installation.md)
 
 完整训练流程和配置详见 [centerpoint](./configs/centerpoint/)，下面以KITTI数据集为例进行简单介绍。
 
